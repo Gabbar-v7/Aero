@@ -1,24 +1,28 @@
 #include <asio.hpp>
 #include <iostream>
 #include <mutex>
-#include <sstream>
 #include <string>
 #include <thread>
 #include <unordered_map>
+#include <vector>
 
 #define PORT 6377
 
 std::unordered_map<std::string, std::string> redis;
 std::mutex mutex;
 
-void handle_client(asio::ip::tcp::socket socket)
-{
+void printVector(const std::vector<std::string> &words) {
+  for (const std::string &word : words) {
+    std::cout << word << " ";
+  }
+  std::cout << std::endl;
+}
+
+void handle_client(asio::ip::tcp::socket socket) {
   asio::streambuf buffer;
 
-  try
-  {
-    while (true)
-    {
+  try {
+    while (true) {
       // Read as much data as available (at least 1 byte)
       size_t bytes_transferred =
           asio::read(socket, buffer, asio::transfer_at_least(1));
@@ -26,78 +30,57 @@ void handle_client(asio::ip::tcp::socket socket)
       // Extract data from the buffer
       std::istream input_stream(&buffer);
       std::string command;
-      std::ostringstream full_command;
+      std::vector<std::string> command_parts;
 
       // Read all lines from the stream
-      std::cout << "command" << command << std::endl;
-      while (std::getline(input_stream, command))
-      {
-        if (!command.empty() && command.back() == '\r')
-        {
+      for (int i = 0; std::getline(input_stream, command); i++) {
+        if (!command.empty() && command.back() == '\r') {
           command.pop_back(); // Remove trailing '\r'
         }
-        full_command << command << " ";
+        command_parts.insert(command_parts.end(), command);
       }
 
-      // Process the full command
-      std::string full_command_str = full_command.str();
-      std::cout << "Received command: " << full_command_str << std::endl;
+      printVector(command_parts);
 
-      // Prepare a response
-      std::string response, key, value;
-      if (full_command_str.find("SET ") == 6)
-      {
+      std::string response;
+      if (command_parts[2] == "set") {
         mutex.lock();
-        //        redis[key] = value;
+        redis[command_parts[4]] = command_parts[6];
         mutex.unlock();
-        response = "+OK\r\n"; // RESP Simple String response for success
-      }
-      else if (full_command_str.find("GET ") == 6)
-      {
+        response = "+OK\r\n";
+      } else if (command_parts[2] == "get" &&
+                 redis.find(command_parts[4]) != redis.end()) {
         mutex.lock();
-        // value = redis[key];
+        response = "+" + redis[command_parts[4]] + "\r\n";
         mutex.unlock();
-        response = "$-1\r\n"; // RESP Null Bulk String (no data found)
-      }
-      else if (full_command_str.find("PING ") != std::string::npos)
-      {
+      } else if (command_parts[2] == "ping") {
         response = "+PONG\r\n";
-      }
-      else
-      {
-        response = "-ERR unknown command\r\n";
+      } else {
+        response = "-ERR unknown command or internal server error\r\n";
       }
 
-      // Send the response to the client
       asio::write(socket, asio::buffer(response));
     }
-  }
-  catch (const std::exception &e)
-  {
+  } catch (const std::exception &e) {
     std::cout << "Failure: Connection closed or error occurred." << std::endl;
     std::cerr << "Error: " << e.what() << std::endl;
   }
 }
 
-int main()
-{
-  try
-  {
+int main() {
+  try {
     asio::io_context io_context;
     asio::ip::tcp::acceptor acceptor(
         io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), PORT));
 
     std::cout << "Server is listening on port 6377...." << std::endl;
-    while (true)
-    {
+    while (true) {
       asio::ip::tcp::socket socket(io_context);
       acceptor.accept(socket);
       std::cout << "Client connected" << std::endl;
       std::thread(handle_client, std::move(socket)).detach();
     }
-  }
-  catch (const std::exception &e)
-  {
+  } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << std::endl;
   }
 
