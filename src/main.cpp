@@ -41,6 +41,8 @@ void handle_client(asio::ip::tcp::socket socket) {
       }
 
       printVector(command_parts);
+      std::transform(command_parts[2].begin(), command_parts[2].end(),
+                     command_parts[2].begin(), ::tolower);
 
       std::string response;
       if (command_parts[2] == "set") {
