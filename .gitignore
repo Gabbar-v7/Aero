@@ -48,3 +48,6 @@ build/
 
 # Secrets
 temp/
+
+# Cache
+.cache/
