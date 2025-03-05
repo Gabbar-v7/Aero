@@ -1,7 +1,9 @@
 # Aero Redis Client
 
 <div align='center'>
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License">
+
 </div>
 
 A lightweight, high-performance C++ Redis client prototype built using **ASIO** for asynchronous networking. This project demonstrates how to interact with a Redis server using modern C++ and asynchronous I/O.
