@@ -1,19 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
+project(AeroRedisServer)
 
-# Project name
-project(Aero VERSION 1.0 LANGUAGES CXX)
+# Include ASIO from the submodule directory
+add_subdirectory(libs/asio)
 
-# Specify the C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+# Add your source files
+set(SOURCES
+    src/main.cpp
+)
 
-# Add executable target
-add_executable(${PROJECT_NAME} main.cpp)
+# Add your executable
+add_executable(AeroRedisServer ${SOURCES})
 
-# Include directories for Asio
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-# Link threads
-find_package(Threads REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
-
+# Link ASIO
+target_link_libraries(AeroRedisServer PRIVATE asio)
