@@ -1,14 +1,6 @@
-# Aero Redis Client
+# Aero Redis Server
 
-<div align='center'>
-
-  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License">
-
-</div>
-
-A lightweight, high-performance C++ Redis client prototype built using **ASIO** for asynchronous networking. This project demonstrates how to interact with a Redis server using modern C++ and asynchronous I/O.
-
----
+A lightweight, high-performance C++ Redis server prototype built using **ASIO** for asynchronous networking. This project demonstrates how to build with a Redis server using modern C++ and asynchronous I/O.
 
 ## Features
 
@@ -17,15 +9,11 @@ A lightweight, high-performance C++ Redis client prototype built using **ASIO** 
 - **Cross-Platform**: Works on Windows, macOS, and Linux.
 - **Dependency-Free**: Only requires ASIO (header-only library).
 
----
-
 ## Prerequisites
 
 - **C++ Compiler**: Supports C++23 (e.g., GCC, Clang, MSVC).
 - **CMake**: Version 3.10 or higher.
 - **Git**: For cloning the repository and managing submodules.
-
----
 
 ## Installation
 
@@ -54,32 +42,25 @@ cmake --build .
 After building, run the executable:
 
 ```bash
-./AeroRedisClient
+./AeroRedisServer
 ```
-
----
 
 ## Usage
 
 ### Basic Example
 
-Here’s an example of how to use the Aero Redis Client to interact with a Redis server:
+Here’s an example of how to interact with Aero Redis Server using Redis Client:
 
-```cpp
-#include "redis_client.h"
-
-int main() {
-    RedisClient client("127.0.0.1", 6379);
-
-    // Set a key-value pair
-    client.set("foo", "bar");
-
-    // Get the value of a key
-    std::string value = client.get("foo");
-    std::cout << "Value of 'foo': " << value << std::endl;
-
-    return 0;
-}
+```bash
+ Aero ❯ master* ❯ redis-cli -p 6377
+    127.0.0.1:6377> set name Gabbar
+    OK
+    127.0.0.1:6377>
+    127.0.0.1:6377> get name
+    Gabbar
+    127.0.0.1:6377> ping
+    PONG
+    127.0.0.1:6377>
 ```
 
 ### Supported Commands
@@ -89,7 +70,7 @@ int main() {
 - `DEL key`: Delete a key.
 - `PING`: Check if the server is alive.
 
----
+**Note:** AeroRedisServer runs on default port 6377
 
 ## Project Structure
 
@@ -99,23 +80,15 @@ Aero/
 ├── README.md                 # Project documentation
 │
 ├── src/                      # Source files
-│     ├── main.cpp            # Example usage
-│     └── redis_client.cpp    # Redis client implementation
-│
-├── include/                  # Header files
-│     └── redis_client.h      # Redis client interface
+│     └── main.cpp            # Starting point
 │
 └── libs/                     # Third-party dependencies
       └── asio/               # ASIO library (submodule)
 ```
 
----
-
 ## Dependencies
 
 - **[ASIO](https://github.com/chriskohlhoff/asio)**: A cross-platform C++ library for network and low-level I/O programming.
-
----
 
 ## Contributing
 
@@ -128,20 +101,14 @@ Contributions are welcome! If you’d like to contribute, please follow these st
 
 For more information, see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
----
-
 ## License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
-
----
 
 ## Acknowledgments
 
 - **ASIO**: For providing a powerful and easy-to-use networking library.
 - **Redis**: For being an awesome in-memory data store.
-
----
 
 ## Issues
 
