@@ -1,6 +1,6 @@
 # Aero Redis Server
 
-A lightweight, high-performance C++ Redis server prototype built using **ASIO** for asynchronous networking. This project demonstrates how to build with a Redis server using modern C++ and asynchronous I/O.
+A lightweight, high-performance C++ Redis server prototype built using **ASIO** for asynchronous networking.
 
 ## Features
 
@@ -11,7 +11,7 @@ A lightweight, high-performance C++ Redis server prototype built using **ASIO** 
 
 ## Prerequisites
 
-- **C++ Compiler**: Supports C++23 (e.g., GCC, Clang, MSVC).
+- **C++ Compiler**: Recommended C++23 (e.g., GCC, Clang, G++, MSVC).
 - **CMake**: Version 3.10 or higher.
 - **Git**: For cloning the repository and managing submodules.
 
@@ -103,7 +103,7 @@ For more information, see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## License
 
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT LICENSE](LICENSE).
 
 ## Acknowledgments
 
