@@ -57,10 +57,14 @@ void handle_client(asio::ip::tcp::socket socket) {
         mutex.unlock();
       } else if (command_parts[2] == "ping") {
         response = "+PONG\r\n";
+      } else if (command_parts[2] == "del") {
+        mutex.lock();
+        redis.erase(command_parts[6]);
+        mutex.unlock();
+        response = ":1\r\n";
       } else {
         response = "-ERR unknown command or internal server error\r\n";
       }
-
       asio::write(socket, asio::buffer(response));
     }
   } catch (const std::exception &e) {
